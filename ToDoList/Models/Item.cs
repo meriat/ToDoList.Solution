@@ -62,8 +62,9 @@ namespace ToDoList.Models
         }
         Main();
       }
-      else if (userAddOrView == "")
+      else if (userAddOrView == "" || userAddOrView != "Add" || userAddOrView != "View")
       {
+        Console.WriteLine("Please enter a valid option, Add or View");
         Main();
       }
     }
