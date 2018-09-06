@@ -34,4 +34,38 @@ namespace ToDoList.Models
       _instances.Clear();
     }
   }
+
+  public class Program
+  {
+    public static void Main()
+    {
+      Console.WriteLine("Would you like to add an item to your list or view your list? (Add/View)");
+
+      string userAddOrView = Console.ReadLine();
+
+      if (userAddOrView == "Add")
+      {
+        Console.WriteLine("Please enter the description for the new item:");
+        string descriptionInput = Console.ReadLine();
+        Item newItem = new Item(descriptionInput);
+        newItem.Save();
+        Main();
+      }
+      else if (userAddOrView == "View")
+      {
+        Console.WriteLine("Here is your list:");
+        List<Item> listInput = Item.GetAll();
+
+        foreach (Item itemToDo in listInput)
+        {
+          Console.WriteLine(itemToDo.GetDescription());
+        }
+        Main();
+      }
+      else if (userAddOrView == "")
+      {
+        Main();
+      }
+    }
+  }
 }
