@@ -7,10 +7,13 @@ namespace ToDoList.Models
   {
     private string _description; // this is a property
     private static List<Item> _instances = new List<Item> {};
+    private int _id;
 
     public Item (string description)  //constructor
     {
       _description = description;
+      _instances.Add(this);
+      _id = _instances.Count;
     }
     public string GetDescription() //method
     {
@@ -20,14 +23,14 @@ namespace ToDoList.Models
     {
       _description = newDescription;
     }
+    public int GetId()
+    {
+      return _id;
+    }
     public static List<Item> GetAll()
     {
       // return new List<Item> {};
       return _instances;
-    }
-    public void Save()
-    {
-      _instances.Add(this);
     }
     public static void ClearAll()
     {
