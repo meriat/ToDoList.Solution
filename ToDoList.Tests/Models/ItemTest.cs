@@ -13,10 +13,10 @@ namespace ToDoList.Tests
         {
             Item.DeleteAll();
         }
-        // public ItemTests()
-        // {
-        //     DBConfiguration.ConnectionString = "server=localhost;user id=root;password=root;port=8889;database=todo_test;";
-        // }
+        public ItemTests()
+        {
+            DBConfiguration.ConnectionString = "server=localhost;user id=root;password=root;port=8889;database=todo_test;";
+        }
         [TestMethod]
         public void GetAll_DbStartsEmpty_0()
         {
