@@ -1,85 +1,31 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using ToDoList.Models;
-using System;
 
-namespace ToDoList.Test
+namespace ToDoList.Tests
 {
-  [TestClass]
-  public class ItemTest : IDisposable
-  {
-    public void Dispose()
+
+    [TestClass]
+    public class ItemTests : IDisposable
     {
-      Item.ClearAll();
-    }
-
-    [TestMethod]
-    public void GetDescription_returnDescription_String()
-    {
-      //Arange
-      string description = "Walk the dog";
-      Item newItem = new Item(description);
-
-      //Act
-      string result = newItem.GetDescription();
-
-      //Assert
-      Assert.AreEqual(description, result);
-    }
-
-    [TestMethod]
-    public void SetDescription_SetDescription_String()
-    {
-      //Arange
-      string description = "Walk the dog";
-      Item newItem = new Item(description);
-
-      //Act
-      string updatedDescription = "Do the dishes";
-      newItem.SetDescription(updatedDescription);
-      string result = newItem.GetDescription();
-
-      //Assert
-      Assert.AreEqual(updatedDescription, result);
-    }
-
-      [TestMethod]
-      public void Save_ItemIsSavedToInstances_Item()
-      {
-        //Arrange
-        string description = "Walk the dog.";
-        Item newItem = new Item(description);
-        newItem.Save();
-
-        //Act
-        List<Item> instances = Item.GetAll();
-        Item savedItem = instances[0];
-
-        //Assert
-        Assert.AreEqual(newItem, savedItem);
-      }
-
-      [TestMethod]
-      public void GetAll_ReturnsItems_ItemList()
-      {
-        //Arange
-        string description01 = "Walk the dog";
-        string description02 = "Wash the dishes";
-        Item newItem1 = new Item(description01);
-        newItem1.Save();
-        Item newItem2 = new Item(description02);
-        newItem2.Save();
-        List<Item> newList = new List<Item> { newItem1, newItem2 };
-
-        //Act
-        List<Item> result = Item.GetAll();
-        foreach (Item thisItem in result)
+        public void Dispose()
         {
-          Console.WriteLine("Output: " + thisItem.GetDescription());
+            Item.DeleteAll();
         }
+        // public ItemTests()
+        // {
+        //     DBConfiguration.ConnectionString = "server=localhost;user id=root;password=root;port=8889;database=todo_test;";
+        // }
+        [TestMethod]
+        public void GetAll_DbStartsEmpty_0()
+        {
+          //Arrange
+          //Act
+          int result = Item.GetAll().Count;
 
-        //Assert
-        CollectionAssert.AreEqual(newList, result);
-      }
+          //Assert
+          Assert.AreEqual(0, result);
+        }
     }
-  }
+}

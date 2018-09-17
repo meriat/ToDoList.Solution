@@ -1,19 +1,19 @@
 using System;
 using System.Collections.Generic;
+using MySql.Data.MySqlClient;
+using ToDoList;
 
 namespace ToDoList.Models
 {
   public class Item
   {
     private string _description; // this is a property
-    private static List<Item> _instances = new List<Item> {};
     private int _id;
 
-    public Item (string description)  //constructor
+    public Item (string description,int Id=0)  //constructor
     {
       _description = description;
-      _instances.Add(this);
-      _id = _instances.Count;
+      _id = Id;
     }
     public string GetDescription() //method
     {
@@ -29,47 +29,42 @@ namespace ToDoList.Models
     }
     public static List<Item> GetAll()
     {
-      // return new List<Item> {};
-      return _instances;
+       List<Item> allItems = new List<Item> {};
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"SELECT * FROM items;";
+            MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+            while(rdr.Read())
+            {
+              int itemId = rdr.GetInt32(0);
+              string itemDescription = rdr.GetString(1);
+              Item newItem = new Item(itemDescription, itemId);
+              allItems.Add(newItem);
+            }
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+            return allItems;
     }
-    public static void ClearAll()
-    {
-      _instances.Clear();
-    }
-  }
+  
+    public static void DeleteAll()
+       {
+           MySqlConnection conn = DB.Connection();
+           conn.Open();
 
-  // public class Program
-  // {
-  //   public static void Main()
-  //   {
-  //     Console.WriteLine("Would you like to add an item to your list or view your list? (Add/View)");
-  //
-  //     string userAddOrView = Console.ReadLine();
-  //
-  //     if (userAddOrView == "Add")
-  //     {
-  //       Console.WriteLine("Please enter the description for the new item:");
-  //       string descriptionInput = Console.ReadLine();
-  //       Item newItem = new Item(descriptionInput);
-  //       newItem.Save();
-  //       Main();
-  //     }
-  //     else if (userAddOrView == "View")
-  //     {
-  //       Console.WriteLine("Here is your list:");
-  //       List<Item> listInput = Item.GetAll();
-  //
-  //       foreach (Item itemToDo in listInput)
-  //       {
-  //         Console.WriteLine(itemToDo.GetDescription());
-  //       }
-  //       Main();
-  //     }
-  //     else if (userAddOrView == "" || userAddOrView != "Add" || userAddOrView != "View")
-  //     {
-  //       Console.WriteLine("Please enter a valid option, Add or View");
-  //       Main();
-  //     }
-  //   }
-  // }
+           var cmd = conn.CreateCommand() as MySqlCommand;
+           cmd.CommandText = @"DELETE FROM items;";
+
+           cmd.ExecuteNonQuery();
+
+           conn.Close();
+           if (conn != null)
+           {
+               conn.Dispose();
+           }
+      }
+  }
 }
